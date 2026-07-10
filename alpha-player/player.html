@@ -2002,7 +2002,7 @@
 
             try {
                 // نكلم سيرفرنا (main.py)
-                const response = await fetch('https://alpha-core-fl0v.onrender.com/api/get-providers');
+                const response = await fetch(`${BACKEND_URL}/api/get-providers`);
                 const data = await response.json();
 
                 if (data && data.status === 1 && data.providers) {
@@ -2133,7 +2133,7 @@
             }
 
             try {
-                const response = await fetch('https://alpha-core-fl0v.onrender.com/api/get-games-list', {
+                const response = await fetch(`${BACKEND_URL}/api/get-games-list`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ provider_code: providerCode })
