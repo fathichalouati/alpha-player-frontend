@@ -176,6 +176,55 @@
     </button>
 
 </div>
+<!-- نموذج إدخال D17 (مخفي افتراضياً) -->
+<div id="form-d17" class="hidden space-y-3 mt-4">
+    <!-- معلومات الدفع الخاصة بك (التي سيراها اللاعب) -->
+    <div class="bg-black/50 p-3 rounded-lg border border-white/10 text-center">
+        <p class="text-xs text-gray-400 mb-1">Veuillez envoyer l'argent à ce numéro :</p>
+        <!-- ضع رقم هاتفك الحقيقي هنا -->
+        <p class="text-xl font-bold text-asbet-primary">22 123 456</p> 
+    </div>
+
+    <!-- إدخال المبلغ -->
+    <input type="number" placeholder="Montant envoyé (TND)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
+    
+    <!-- زر رفع لقطة الشاشة (Screenshot) -->
+    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-asbet-primary transition-all">
+        <span class="text-sm text-gray-300">📸 Importer le reçu (Capture d'écran)</span>
+        <input type="file" accept="image/*" class="hidden"> <!-- هذا الكود يفتح معرض الصور في هاتف اللاعب -->
+    </label>
+
+    <!-- أزرار التأكيد والرجوع -->
+    <div class="flex gap-2 mt-2">
+        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+        <button class="flex-1 bg-asbet-primary text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+    </div>
+</div>
+
+<!-- نموذج إدخال USDT (مخفي افتراضياً) -->
+<div id="form-usdt" class="hidden space-y-3 mt-4">
+    <!-- معلومات محفظتك -->
+    <div class="bg-black/50 p-3 rounded-lg border border-white/10 text-center">
+        <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
+        <!-- ضع عنوان محفظتك هنا -->
+        <p class="text-xs font-bold text-asbet-primary break-all">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
+    </div>
+
+    <!-- إدخال المبلغ -->
+    <input type="number" placeholder="Montant envoyé (USDT)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
+    
+    <!-- زر رفع لقطة الشاشة -->
+    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-asbet-primary transition-all">
+        <span class="text-sm text-gray-300">📸 Importer le reçu (Capture d'écran)</span>
+        <input type="file" accept="image/*" class="hidden">
+    </label>
+
+    <!-- أزرار التأكيد والرجوع -->
+    <div class="flex gap-2 mt-2">
+        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+        <button class="flex-1 bg-asbet-primary text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+    </div>
+</div>
                
         <div id="form-d17" class="hidden space-y-3 mt-4">
             <input type="number" placeholder="Montant (TND)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
