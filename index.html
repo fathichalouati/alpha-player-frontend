@@ -149,7 +149,7 @@
             </div>
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
-                <div class="grid grid-cols-2 gap-3">
+                <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
                     <button onclick="selectPaymentMethod('d17')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
                         <span class="text-2xl">📱</span><span class="text-[10px] font-bold text-white">D17 / Flouci</span>
                     </button>
@@ -157,6 +157,25 @@
                         <span class="text-2xl">🪙</span><span class="text-[10px] font-bold text-white">USDT (Binance)</span>
                     </button>
                 </div>
+                <!-- نموذج إدخال D17 (مخفي افتراضياً) -->
+        <div id="form-d17" class="hidden space-y-3 mt-4">
+            <input type="number" placeholder="Montant (TND)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
+            <input type="tel" placeholder="Numéro de téléphone" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
+            <div class="flex gap-2 mt-2">
+                <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+                <button class="flex-1 bg-asbet-primary text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+            </div>
+        </div>
+
+        <!-- نموذج إدخال USDT (مخفي افتراضياً) -->
+        <div id="form-usdt" class="hidden space-y-3 mt-4">
+            <input type="number" placeholder="Montant (USDT)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
+            <input type="text" placeholder="Adresse du portefeuille" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
+            <div class="flex gap-2 mt-2">
+                <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+                <button class="flex-1 bg-asbet-primary text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+            </div>
+        </div>
             </div>
             <div id="withdraw-section" class="hidden space-y-4">
                 <div class="bg-asbet-accent/10 border border-asbet-accent/20 p-3 rounded-xl text-[10px] text-asbet-accent font-bold mb-4 text-center">
@@ -1021,5 +1040,30 @@ function closeProfileMenu() {
             generateLiveWinnersTicker();
         });
     </script>
+    <script>
+        
+    // 1. وظيفة فتح نموذج الدفع (D17 أو USDT)
+    function selectPaymentMethod(method) {
+        // إخفاء الأزرار الأساسية
+        document.getElementById('payment-methods-grid').style.display = 'none';
+
+        // إظهار النموذج المطلوب بناءً على الضغطة
+        if (method === 'd17') {
+            document.getElementById('form-d17').classList.remove('hidden');
+        } else if (method === 'usdt') {
+            document.getElementById('form-usdt').classList.remove('hidden');
+        }
+    }
+
+    // 2. وظيفة زر الرجوع (Retour) للعودة للأزرار
+    function backToMethods() {
+        // إخفاء نماذج الإدخال
+        document.getElementById('form-d17').classList.add('hidden');
+        document.getElementById('form-usdt').classList.add('hidden');
+
+        // إعادة إظهار الأزرار الأساسية
+        document.getElementById('payment-methods-grid').style.display = 'grid';
+    }
+</script>
 </body>
 </html>
