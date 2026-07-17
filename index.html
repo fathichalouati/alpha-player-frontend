@@ -73,7 +73,6 @@
    /* تصميم قائمة الملف الشخصي */
 .profile-popup-menu {
     position: fixed;
-    bottom: 90px; /* فوق شريط التنقل */
     right: 15px;  /* محاذاة لليمين لأن زر البروفايل على اليمين */
     background-color: #1a0b2e;
     border: 1px solid #E8006F;
@@ -227,6 +226,8 @@
     
     <a href="#" onclick="openLoginModal(); closeProfileMenu();" class="menu-item" style="color: #ff4444;"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
 </div>
+<!-- هذه المساحة تمنع اختفاء المحتوى خلف شريط الأزرار -->
+<div style="height: 120px; width: 100%; display: block; clear: both;"></div>
     <!-- شريط التنقل السفلي -->
     <nav class="bottom-nav fixed md:hidden bottom-0 left-0 right-0 h-[65px] flex justify-around items-center px-2 z-[100]">
         <button onclick="switchSection('accueil')" class="nav-item active flex flex-col items-center justify-center w-[20%] text-gray-500 transition-colors cursor-pointer">
@@ -251,11 +252,15 @@
     </nav>
 <!-- القائمة المنبثقة لزر الملف الشخصي -->
 <div id="profileMenu" class="profile-popup-menu">
-    <a href="#account" class="menu-item"><i class="fas fa-user-circle"></i> Mon Compte</a>
-    <a href="#deposit" class="menu-item highlight"><i class="fas fa-wallet"></i> Dépôt Rapide</a>
-    <a href="#withdraw" class="menu-item"><i class="fas fa-money-bill-wave"></i> Retrait</a>
-    <a href="#history" class="menu-item"><i class="fas fa-history"></i> Historique</a>
-    <a href="#logout" class="menu-item" style="color: #ff4444;"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    <a href="javascript:void(0)" onclick="document.getElementById('profileMenu').style.display='none';" class="menu-item"><i class="fas fa-user-circle"></i> Mon Compte</a>
+    
+    <a href="javascript:void(0)" onclick="document.getElementById('profileMenu').style.display='none';" class="menu-item highlight"><i class="fas fa-wallet"></i> Dépôt Rapide</a>
+    
+    <a href="javascript:void(0)" onclick="document.getElementById('profileMenu').style.display='none';" class="menu-item"><i class="fas fa-money-bill-wave"></i> Retrait</a>
+    
+    <a href="javascript:void(0)" onclick="document.getElementById('profileMenu').style.display='none';" class="menu-item"><i class="fas fa-history"></i> Historique</a>
+    
+    <a href="javascript:void(0)" onclick="document.getElementById('profileMenu').style.display='none';" class="menu-item" style="color: #ff4444;"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
 </div>
     <div class="flex flex-1 overflow-hidden w-full">
         <!-- الشريط الجانبي للشاشات الكبيرة -->
