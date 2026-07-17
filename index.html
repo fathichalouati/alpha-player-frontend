@@ -414,63 +414,70 @@
                 <div class="mt-6">
     <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
         <h3 class="text-white font-bold text-base group-hover:text-[#E8006F] transition-colors">🎰 Pragmatic Play</h3>
-        <div class="flex items-center gap-1">
-            <span class="text-gray-400 text-xs font-bold">+140</span>
-            <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
-        </div>
+        <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
     </div>
-    <div class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
-        <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-            <img src="gates-of-olympus.jpg" alt="Gates of Olympus" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a href="/play/real/gates-of-olympus" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</a>
-            </div>
+    <div id="slider-pragmatic" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
         </div>
-        <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-            <img src="sweet-bonanza.jpg" alt="Sweet Bonanza" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a href="/play/real/sweet-bonanza" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</a>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="mt-6">
     <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
         <h3 class="text-white font-bold text-base group-hover:text-[#E8006F] transition-colors">🦈 Hacksaw Gaming</h3>
-        <div class="flex items-center gap-1">
-            <span class="text-gray-400 text-xs font-bold">+85</span>
-            <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
-        </div>
+        <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
     </div>
-    <div class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
-        <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-            <img src="wanted-dead.jpg" alt="Wanted Dead" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a href="/play/real/wanted-dead" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</a>
-            </div>
+    <div id="slider-hacksaw" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
         </div>
-    </div>
 </div>
 
 <div class="mt-6 mb-8">
     <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
         <h3 class="text-white font-bold text-base group-hover:text-[#E8006F] transition-colors">🍒 Playson</h3>
-        <div class="flex items-center gap-1">
-            <span class="text-gray-400 text-xs font-bold">+110</span>
-            <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
-        </div>
+        <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
     </div>
-    <div class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
-        <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-            <img src="royal-coins.jpg" alt="Royal Coins" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a href="/play/real/royal-coins" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</a>
-            </div>
+    <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
         </div>
-    </div>
 </div>
-            </div>
+
+<script>
+    // دالة لتوليد الأشرطة تلقائياً
+    function renderSlider(providerName, containerId, allGamesArray) {
+        const container = document.getElementById(containerId);
+        if (!container || !allGamesArray) return;
+        
+        container.innerHTML = ''; // تنظيف الصندوق
+
+        // تصفية الألعاب حسب المزود (جلب 10 ألعاب كحد أقصى للشريط)
+        const providerGames = allGamesArray.filter(game => game.provider === providerName).slice(0, 10);
+
+        // رسم البطاقات
+        providerGames.forEach(game => {
+            const gameCard = `
+                <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
+                    <img src="${game.image_url}" alt="${game.name}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button onclick="${game.play_function}" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += gameCard;
+        });
+    }
+
+    // تشغيل المحرك بمجرد تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // ⚠️ مهم جداً ⚠️
+        // استبدل كلمة 'casinoGamesArray' بالاسم الحقيقي للمتغير الذي يحمل ألعاب الكازينو في موقعك
+        const myGames = typeof casinoGamesArray !== 'undefined' ? casinoGamesArray : []; 
+        
+        // إذا تم العثور على الألعاب، سيتم تعبئة الأشرطة فوراً
+        if(myGames.length > 0) {
+            renderSlider('Pragmatic Play', 'slider-pragmatic', myGames);
+            renderSlider('Hacksaw Gaming', 'slider-hacksaw', myGames);
+            renderSlider('Playson', 'slider-playson', myGames);
+        }
+    });
+</script>
             
 
             <!-- قسم الرياضة -->
@@ -1291,6 +1298,38 @@ async function submitDeposit(method) {
         alert("Une erreur de connexion s'est produite.");
     }
 }
+
+    // دالة لتوليد الأشرطة تلقائياً
+    function renderSlider(providerCode, containerId, allGamesArray) {
+        const container = document.getElementById(containerId);
+        if (!container || !allGamesArray || allGamesArray.length === 0) return;
+        
+        container.innerHTML = ''; // تنظيف الصندوق
+
+        // رسم البطاقات للألعاب
+        allGamesArray.forEach(game => {
+            const gameCard = `
+                <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
+                    <img src="${game.banner}" alt="Game" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += gameCard;
+        });
+    }
+
+    // سنقوم الآن بطلب الألعاب من مصدرها في موقعك
+    // سأترك لك هنا تعليقاً: يجب استدعاء هذه الدالة بعد أن يجلب موقعك الألعاب من السيرفر.
+    
+    // مثال للتشغيل (يمكنك وضعه داخل الدالة التي تجلبون فيها الألعاب من الباك إند):
+    /*
+       renderSlider('pragmatic', 'slider-pragmatic', مصفوفة_ألعاب_براغماتيك);
+       renderSlider('hacksaw', 'slider-hacksaw', مصفوفة_ألعاب_هاكساو);
+       renderSlider('playson', 'slider-playson', مصفوفة_ألعاب_بلايسون);
+    */
+</script>
 </script>
 
  
