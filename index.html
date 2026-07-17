@@ -495,6 +495,13 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
             closeProfileMenu();
         }
+        // هذه هي الدالة المفقودة التي سببت المشكلة
+function closeProfileMenu() {
+    const menu = document.getElementById('profileMenu');
+    if (menu) {
+        menu.classList.remove('show');
+    }
+}
 
        function toggleProfileMenu(event) {
             event.stopPropagation(); 
