@@ -32,6 +32,14 @@
     </script>
 
     <style>
+        /* كود إخفاء شريط التمرير للأشرطة الأفقية */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* لمتصفح Edge */
+    scrollbar-width: none;  /* لمتصفح Firefox */
+}
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
       
@@ -411,56 +419,7 @@
                     <h3 class="text-white font-black text-xs uppercase tracking-wider mb-4">⭐ Trending Games</h3>
                     <div id="trending-games-container" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <div class="mt-6">
-    <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🎰 Pragmatic Play</h3>
-        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
-    </div>
-    <div id="slider-pragmatic" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
-</div>
-
-<div class="mt-6">
-    <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🦈 Hacksaw Gaming</h3>
-        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
-    </div>
-    <div id="slider-hacksaw" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
-</div>
-
-<div class="mt-6 mb-8">
-    <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🍒 Playson</h3>
-        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
-    </div>
-    <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
-</div>
-
-<script>
-    function renderSlider(providerCode, containerId, gamesArray) {
-        const container = document.getElementById(containerId);
-        if (!container || !gamesArray || gamesArray.length === 0) return;
-        
-        container.innerHTML = ''; // تنظيف الصندوق قبل التعبئة
-
-        // أخذ أول 10 ألعاب فقط لعدم إثقال الشريط
-        const sliderGames = gamesArray.slice(0, 10);
-
-        // رسم البطاقات بالبيانات الحقيقية (الصورة + كود التشغيل)
-        sliderGames.forEach(game => {
-            const gameCard = `
-                <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-                    <img src="${game.banner}" loading="lazy" alt="Game" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
-                            Jouer
-                        </button>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += gameCard;
-        });
-    }
-</script>            
+            </div>
 
             <!-- قسم الرياضة -->
             <div id="pane-sport" class="player-view-section space-y-4 hidden px-2"></div>
@@ -1237,64 +1196,29 @@ function syncBalance() {
     document.getElementById('modal-balance').innerText = mainBalanceText;
 }
 
-async function submitDeposit(method) {
-    // 1. جلب البيانات من الخانات
-    const codeInput = document.getElementById(method + '-code');
-    const fileInput = document.getElementById(method + '-file');
-    
-    // التأكد من أن اللاعب أدخل البيانات
-    if (!codeInput.value) {
-        alert("Veuillez entrer le code/montant.");
-        return;
-    }
+<!-- ================= المحرك الذكي لجلب الألعاب للأشرطة ================= -->
 
-    // 2. تجميع البيانات والملف في صندوق واحد (FormData)
-    let formData = new FormData();
-    formData.append('method', method); // نوع الشحن (أوريدو، أورانج...)
-    formData.append('payment_data', codeInput.value); // كود البطاقة أو المبلغ
-    
-    // إذا قام برفع صورة، قم بإضافتها
-    if (fileInput.files.length > 0) {
-        formData.append('proof_image', fileInput.files[0]);
-    }
-
-    try {
-        // 3. إرسال الصندوق إلى الرابط الخاص بالـ Backend (مثلاً /api/deposit)
-        // قم بتغيير هذا الرابط حسب الرابط المبرمج في ملفات البايثون لديك
-        let response = await fetch('/api/deposit', {
-            method: 'POST',
-            body: formData
-        });
-
-        let result = await response.json();
-        
-        if (result.success) {
-            alert("Demande envoyée avec succès ! En attente de confirmation."); // تم الإرسال للمدير
-            backToMethods(); // إغلاق النافذة
-            codeInput.value = ''; // تفريغ الخانة
-        } else {
-            alert("Erreur lors de l'envoi de la demande.");
-        }
-    } catch (error) {
-        console.error('Erreur:', error);
-        alert("Une erreur de connexion s'est produite.");
-    }
-}
-
-    // دالة لتوليد الأشرطة تلقائياً
-    function renderSlider(providerCode, containerId, allGamesArray) {
+    // 1. دالة رسم الألعاب في الشريط (تأخذ الصورة والكود)
+    function renderSlider(providerCode, containerId, gamesArray) {
         const container = document.getElementById(containerId);
-        if (!container || !allGamesArray || allGamesArray.length === 0) return;
+        if (!container || !gamesArray || gamesArray.length === 0) return;
         
         container.innerHTML = ''; // تنظيف الصندوق
 
-        // رسم البطاقات للألعاب
-        allGamesArray.forEach(game => {
+        const sliderGames = gamesArray.slice(0, 10); // عرض 10 ألعاب فقط
+
+        sliderGames.forEach(game => {
+            // استخدام نفس طريقة موقعك في جلب الصورة واسم اللعبة
+            const imgUrl = game.banner || game.image || game.thumb || '';
+            const gameCode = game.game_code || game.id || '';
+            
             const gameCard = `
                 <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-                    <img src="${game.banner}" alt="Game" class="w-full h-full object-cover">
+                    <img src="${imgUrl}" loading="lazy" alt="Game" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</button>
+                        <button onclick="playCasinoGame('${providerCode}', '${gameCode}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
+                            Jouer
+                        </button>
                     </div>
                 </div>
             `;
@@ -1302,16 +1226,51 @@ async function submitDeposit(method) {
         });
     }
 
-    // سنقوم الآن بطلب الألعاب من مصدرها في موقعك
-    // سأترك لك هنا تعليقاً: يجب استدعاء هذه الدالة بعد أن يجلب موقعك الألعاب من السيرفر.
-    
-    // مثال للتشغيل (يمكنك وضعه داخل الدالة التي تجلبون فيها الألعاب من الباك إند):
-    /*
-       renderSlider('pragmatic', 'slider-pragmatic', مصفوفة_ألعاب_براغماتيك);
-       renderSlider('hacksaw', 'slider-hacksaw', مصفوفة_ألعاب_هاكساو);
-       renderSlider('playson', 'slider-playson', مصفوفة_ألعاب_بلايسون);
-    */
-</script>
+    // 2. دالة الجلب الصامت (تعمل في الخلفية لجلب ألعاب كل شريط)
+    async function fetchSliderGames(providerCode, containerId) {
+        const cacheKey = 'alpha_games_' + providerCode;
+        const cachedGames = localStorage.getItem(cacheKey);
+
+        // إذا كانت الألعاب في الذاكرة، ارسمها فوراً
+        if (cachedGames) {
+            renderSlider(providerCode, containerId, JSON.parse(cachedGames));
+            return;
+        }
+
+        // إذا لم تكن في الذاكرة، اجلبها من السيرفر بصمت
+        try {
+            // نفس الرابط الدقيق الذي يستخدمه موقعك!
+            const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider_code: providerCode })
+            });
+
+            const rawText = await response.text();
+            if (rawText) {
+                const data = JSON.parse(rawText);
+                if (data && data.games && data.games.length > 0) {
+                    // حفظ في الذاكرة لسرعة الفتح في المرة القادمة
+                    localStorage.setItem(cacheKey, JSON.stringify(data.games));
+                    // رسم الشريط
+                    renderSlider(providerCode, containerId, data.games);
+                }
+            }
+        } catch (error) {
+            console.log("Erreur slider:", providerCode);
+        }
+    }
+
+    // 3. تشغيل المحرك فور تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+        // ⚠️ مهم: تأكد أن الأكواد هنا ('pragmatic', 'hacksaw', 'playson') 
+        // هي نفس الأكواد الدقيقة الموجودة في قاعدة بياناتك لكل مزود
+        fetchSliderGames('pragmatic', 'slider-pragmatic');
+        fetchSliderGames('hacksaw', 'slider-hacksaw');
+        fetchSliderGames('playson', 'slider-playson');
+    });
+
+
 </script>
 
  
