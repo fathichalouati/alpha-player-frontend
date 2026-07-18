@@ -448,22 +448,24 @@
     <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
     <!-- ================= كبسولة المحرك المستقلة (تعمل بقوة إجبارية) ================= -->
 <script>
+   <!-- ================= كبسولة المحرك المستقلة (تعمل بقوة إجبارية) ================= -->
+
     console.log("🚀 كبسولة الأشرطة الذكية بدأت العمل!");
 
     (async function forceLoadSliders() {
-        const API_URL = "https://alpha-backend-server.onrender.com"; // رابط مباشر لضمان عدم الاعتماد على أي كود آخر
+        const API_URL = "https://alpha-backend-server.onrender.com"; 
         
+        // السر هنا: وضعنا الأكواد بحروف كبيرة (Majuscule) تماماً كما يطلبها السيرفر!
         const providers = [
-            { code: 'pragmatic', boxId: 'slider-pragmatic' },
-            { code: 'hacksaw', boxId: 'slider-hacksaw' },
-            { code: 'playson', boxId: 'slider-playson' }
+            { code: 'PRAGMATIC', boxId: 'slider-pragmatic' },
+            { code: 'HACKSAW', boxId: 'slider-hacksaw' },
+            { code: 'PLAYSON', boxId: 'slider-playson' }
         ];
 
         for (let prov of providers) {
             let container = document.getElementById(prov.boxId);
             
             if (container) {
-                // طباعة رسالة التحميل فوراً
                 container.innerHTML = `<div class="text-[#E8006F] text-xs px-4 py-2 font-bold animate-pulse">⏳ Chargement des jeux...</div>`;
                 
                 try {
@@ -475,9 +477,12 @@
                     
                     let data = await response.json();
                     
-                    if (data && data.games && data.games.length > 0) {
+                    // استخراج الألعاب
+                    let gamesArray = data.games || data.data || [];
+                    
+                    if (gamesArray && gamesArray.length > 0) {
                         container.innerHTML = ''; // تنظيف الصندوق
-                        let topGames = data.games.slice(0, 10); // أخذ 10 ألعاب
+                        let topGames = gamesArray.slice(0, 10); // أخذ 10 ألعاب
                         
                         topGames.forEach(game => {
                             let img = game.banner || game.image || game.thumb || "https://placehold.co/400x300/180A2B/FFF?text=Casino";
