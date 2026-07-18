@@ -423,7 +423,7 @@
 
 <!-- 1. شريط Pragmatic Play -->
 <div class="mt-6">
-    <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
+    <div class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
         <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🎰 Pragmatic Play</h3>
         <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
@@ -432,7 +432,7 @@
 
 <!-- 2. شريط Hacksaw Gaming -->
 <div class="mt-6">
-    <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
+    <div class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
         <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🦈 Hacksaw Gaming</h3>
         <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
@@ -441,7 +441,7 @@
 
 <!-- 3. شريط Playson -->
 <div class="mt-6 mb-8">
-    <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
+    <div class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
         <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🍒 Playson</h3>
         <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
@@ -474,51 +474,6 @@
             container.innerHTML += gameCard;
         });
     }
-</script>
-<!-- ============================================================================== -->
- <!-- ================= كود التشغيل التلقائي للأشرطة ================= -->
-<script>
-    // هذه الدالة تجلب الألعاب في الخلفية وتضعها في الأشرطة
-    async function loadSliderGames(providerCode, containerId) {
-        // 1. فحص الذاكرة (Cache) أولاً لسرعة فائقة لتجنب إرهاق السيرفر
-        const cacheKey = 'alpha_games_' + providerCode;
-        const cachedGames = localStorage.getItem(cacheKey);
-
-        if (cachedGames) {
-            // إذا كانت الألعاب محفوظة مسبقاً، اعرضها فوراً
-            renderSlider(providerCode, containerId, JSON.parse(cachedGames));
-            return;
-        }
-
-        // 2. إذا لم تكن موجودة في الذاكرة، اطلبها من السيرفر بصمت
-        try {
-            const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ provider_code: providerCode })
-            });
-            const rawText = await response.text();
-            const data = JSON.parse(rawText);
-
-            if (data && data.games && data.games.length > 0) {
-                // احفظها في الذاكرة للمرة القادمة
-                localStorage.setItem(cacheKey, JSON.stringify(data.games));
-                // ارسم المربعات في الشريط
-                renderSlider(providerCode, containerId, data.games);
-            }
-        } catch (error) {
-            console.error("تعذر جلب ألعاب المزود: " + providerCode, error);
-        }
-    }
-
-    // تشغيل المحرك بمجرد أن يفتح اللاعب الموقع
-    document.addEventListener('DOMContentLoaded', () => {
-        // ⚠️ ملاحظة: يجب أن تكون هذه الأكواد مطابقة لما تستخدمونه في السيرفر
-        // إذا كان السيرفر يستخدم حروفاً كبيرة (مثل PRAGMATIC)، قم بتغييرها هنا
-        loadSliderGames('pragmatic', 'slider-pragmatic');
-        loadSliderGames('hacksaw', 'slider-hacksaw');
-        loadSliderGames('playson', 'slider-playson');
-    });
 </script>
 <!-- ============================================================================== -->
             </div>
@@ -1327,52 +1282,73 @@ function syncBalance() {
             container.innerHTML += gameCard;
         });
     }
+   
+    // 1. دالة رسم المربعات في الشاشة
+    function renderSlider(providerCode, containerId, gamesArray) {
+        const container = document.getElementById(containerId);
+        if (!container || !gamesArray || gamesArray.length === 0) return;
+        
+        container.innerHTML = ''; 
+        const sliderGames = gamesArray.slice(0, 10); // أخذ 10 ألعاب فقط
 
-    // 2. دالة الجلب الصامت (تعمل في الخلفية لجلب ألعاب كل شريط)
-    async function fetchSliderGames(providerCode, containerId) {
-        const cacheKey = 'alpha_games_' + providerCode;
-        const cachedGames = localStorage.getItem(cacheKey);
+        sliderGames.forEach(game => {
+            const gameCard = `
+                <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
+                    <img src="${game.banner}" loading="lazy" alt="Game" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
+                            Jouer
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += gameCard;
+        });
+    }
 
-        // إذا كانت الألعاب في الذاكرة، ارسمها فوراً
-        if (cachedGames) {
-            renderSlider(providerCode, containerId, JSON.parse(cachedGames));
-            return;
-        }
+    // 2. دالة الإقلاع لجلب ألعاب الأشرطة الثلاثة
+    async function loadHomeSliders() {
+        // قائمة المزودين الذين نريدهم في الصفحة الرئيسية
+        const homeProviders = [
+            { code: 'pragmatic', container: 'slider-pragmatic' },
+            { code: 'hacksaw', container: 'slider-hacksaw' },
+            { code: 'playson', container: 'slider-playson' }
+        ];
 
-        // إذا لم تكن في الذاكرة، اجلبها من السيرفر بصمت
-        try {
-            // نفس الرابط الدقيق الذي يستخدمه موقعك!
-            const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ provider_code: providerCode })
-            });
+        for (const prov of homeProviders) {
+            try {
+                // البحث في ذاكرة المتصفح أولاً لسرعة فائقة (نفس نظام موقعك)
+                const cacheKey = 'alpha_games_' + prov.code;
+                const cachedGames = localStorage.getItem(cacheKey);
 
-            const rawText = await response.text();
-            if (rawText) {
-                const data = JSON.parse(rawText);
-                if (data && data.games && data.games.length > 0) {
-                    // حفظ في الذاكرة لسرعة الفتح في المرة القادمة
-                    localStorage.setItem(cacheKey, JSON.stringify(data.games));
-                    // رسم الشريط
-                    renderSlider(providerCode, containerId, data.games);
+                if (cachedGames) {
+                    renderSlider(prov.code, prov.container, JSON.parse(cachedGames));
                 }
+
+                // جلب التحديثات من السيرفر بصمت في الخلفية
+                const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: prov.code })
+                });
+                
+                const rawText = await response.text();
+                if (rawText) {
+                    const data = JSON.parse(rawText);
+                    if (data && data.games && data.games.length > 0) {
+                        localStorage.setItem(cacheKey, JSON.stringify(data.games)); // تحديث الذاكرة
+                        renderSlider(prov.code, prov.container, data.games); // تحديث الأشرطة
+                    }
+                }
+            } catch (error) {
+                // صمت في حال وجود خطأ كي لا يتأثر الموقع
             }
-        } catch (error) {
-            console.log("Erreur slider:", providerCode);
         }
     }
 
-    // 3. تشغيل المحرك فور تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', () => {
-        // ⚠️ مهم: تأكد أن الأكواد هنا ('pragmatic', 'hacksaw', 'playson') 
-        // هي نفس الأكواد الدقيقة الموجودة في قاعدة بياناتك لكل مزود
-        fetchSliderGames('pragmatic', 'slider-pragmatic');
-        fetchSliderGames('hacksaw', 'slider-hacksaw');
-        fetchSliderGames('playson', 'slider-playson');
-    });
+    // 3. تشغيل المحرك تلقائياً بعد نصف ثانية من فتح الصفحة
+    setTimeout(loadHomeSliders, 500);
 </script>
-
+<!-- ============================================================================== -->
 </script>
 
  
