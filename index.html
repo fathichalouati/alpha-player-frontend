@@ -1709,6 +1709,19 @@ function switchCashierTab(tabName) {
         if (sectionDeposit) sectionDeposit.classList.add('hidden');
     }
 }
+// ================= دالة إرسال طلب الإيداع النهائي =================
+function submitDeposit() {
+    // 1. إظهار رسالة نجاح للاعب (يمكنك تغيير النص كما تشاء)
+    alert("✅ Votre demande de dépôt a été envoyée avec succès ! Elle sera traitée dans les plus brefs délais.");
+    
+    // 2. إغلاق نافذة الكاشير بعد نجاح العملية
+    const modal = document.getElementById('cashier-modal');
+    if (modal) {
+        modal.classList.add('hidden'); // استخدام add('hidden') لإخفائها
+    }
+    
+    // ملاحظة: لاحقاً هنا سنضع الكود الذي يرسل البيانات لقاعدة البيانات الخاصة بك
+}
         
 </script>
 </body>
