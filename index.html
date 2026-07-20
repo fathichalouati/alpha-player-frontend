@@ -1659,6 +1659,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+// ================= دوال التحكم في نافذة الدفع (الكاشير) =================
+
+// 1. دالة فتح وإغلاق النافذة
+function toggleCashier() {
+    const modal = document.getElementById('cashier-modal');
+    if (modal) {
+        modal.classList.toggle('hidden');
+    }
+}
+
+// 2. دالة التبديل بين الإيداع (Dépôt) والسحب (Retrait)
+function switchCashierTab(tabName) {
+    const tabDeposit = document.getElementById('tab-deposit');
+    const tabWithdraw = document.getElementById('tab-withdraw');
+    const sectionDeposit = document.getElementById('deposit-section');
+    const sectionWithdraw = document.getElementById('withdraw-section'); // تأكد أن قسم السحب يحمل هذا المعرف
+
+    if (tabName === 'deposit') {
+        // تفعيل زر الإيداع
+        if (tabDeposit) {
+            tabDeposit.classList.add('bg-asbet-primary', 'text-white');
+            tabDeposit.classList.remove('text-gray-400', 'hover:text-white');
+        }
+        // إيقاف زر السحب
+        if (tabWithdraw) {
+            tabWithdraw.classList.add('text-gray-400', 'hover:text-white');
+            tabWithdraw.classList.remove('bg-asbet-primary', 'text-white');
+        }
+        
+        // إظهار المحتوى
+        if (sectionDeposit) sectionDeposit.classList.remove('hidden');
+        if (sectionWithdraw) sectionWithdraw.classList.add('hidden');
+        
+    } else if (tabName === 'withdraw') {
+        // تفعيل زر السحب
+        if (tabWithdraw) {
+            tabWithdraw.classList.add('bg-asbet-primary', 'text-white');
+            tabWithdraw.classList.remove('text-gray-400', 'hover:text-white');
+        }
+        // إيقاف زر الإيداع
+        if (tabDeposit) {
+            tabDeposit.classList.add('text-gray-400', 'hover:text-white');
+            tabDeposit.classList.remove('bg-asbet-primary', 'text-white');
+        }
+        
+        // إظهار المحتوى
+        if (sectionWithdraw) sectionWithdraw.classList.remove('hidden');
+        if (sectionDeposit) sectionDeposit.classList.add('hidden');
+    }
+}
+        
 </script>
 </body>
 </html>
