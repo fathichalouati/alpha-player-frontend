@@ -502,28 +502,28 @@ html, body {
 
 <!-- 1. شريط Pragmatic Play -->
 <div class="mt-6">
-    <div class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🎰 Pragmatic Play</h3>
-        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
-    </div>
+   <div onclick="goToCasinoProvider('PRAGMATIC')" class="flex justify-between items-center px-4 mb-3 cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-colors">
+    <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🎰 Pragmatic Play</h3>
+    <span class="text-white text-base group-hover:text-asbet-primary transition-colors">Voir Tout ›</span>
+</div>
     <div id="slider-pragmatic" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
 </div>
 
 <!-- 2. شريط Hacksaw Gaming -->
 <div class="mt-6">
-    <div class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🦈 Hacksaw Gaming</h3>
-        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
-    </div>
+   <div onclick="goToCasinoProvider('HACKSAW')" class="flex justify-between items-center px-4 mb-3 cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-colors">
+    <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🦈 Hacksaw Gaming</h3>
+    <span class="text-white text-base group-hover:text-asbet-primary transition-colors">Voir Tout ›</span>
+</div>
     <div id="slider-hacksaw" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
 </div>
 
 <!-- 3. شريط Playson -->
 <div class="mt-6 mb-8">
-    <div class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🍒 Playson</h3>
-        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
-    </div>
+   <div onclick="goToCasinoProvider('PLAYSON')" class="flex justify-between items-center px-4 mb-3 cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-colors">
+    <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🍒 Playson</h3>
+    <span class="text-white text-base group-hover:text-asbet-primary transition-colors">Voir Tout ›</span>
+</div>
     <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
     <!-- ================= كبسولة المحرك المستقلة (تعمل بقوة إجبارية) ================= -->
 <script>
@@ -1546,10 +1546,65 @@ async function fetchGameOfDayImage() {
 // تشغيل الدالة فوراً عند فتح الصفحة
 fetchGameOfDayImage();
 // =================================================================
-</script>
-</body>
-</html>
- 
+
+// ================= 1. دالة الانتقال السريع لمزود محدد في الكازينو =================
+function goToCasinoProvider(providerCode) {
+    // 1. فتح قسم الكازينو
+    switchSection('casino');
+    initCasinoLobby();
+    
+    // 2. الانتظار قليلاً حتى يتم تحميل واجهة الكازينو ثم تفعيل المزود المطلوب
+    setTimeout(() => {
+        loadProviderGames(providerCode);
+        // النزول برفق إلى قسم الألعاب
+        document.getElementById('games-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+}
+
+// ================= 2. دالة تفعيل السحب بالفأرة للأشرطة الأفقية في الحاسوب =================
+function enableMouseDragScroll(sliderId) {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.style.cursor = 'grabbing'; // تغيير شكل الفأرة لعلامة الإمساك
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.style.cursor = 'pointer';
+    });
+
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.style.cursor = 'pointer';
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 2; // تسريع السحب (يمكنك تغيير الرقم 2 لزيادة السرعة)
+        slider.scrollLeft = scrollLeft - walk;
+    });
+}
+
+// تشغيل ميزة السحب على الأشرطة الثلاثة بعد تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    // نعطي المتصفح وقتاً صغيراً جداً ليرسم الأشرطة ثم نطبق عليها السحب
+    setTimeout(() => {
+        enableMouseDragScroll('slider-pragmatic');
+        enableMouseDragScroll('slider-hacksaw');
+        enableMouseDragScroll('slider-playson');
+    }, 1000);
+});
 </script>
 </body>
 </html>
